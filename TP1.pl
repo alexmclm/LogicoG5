@@ -47,4 +47,11 @@ esSpoiler(Serie,Spoiler):- paso(Serie,_,_,Spoiler).
 /*se puede hacer preguntas existenciales e individuales */
 
 /*PUNTO 4*/
-leSpoileo
+leSpoileo(Persona,PersonaSpoileada,Serie):-serieQueVeOPlaneaVer(PersonaSpoileada,Serie),
+                                            leDijo(Persona,PersonaSpoileada,Serie,_).
+
+serieQueVeOPlaneaVer(PersonaSpoileada,Serie):-queMira(PersonaSpoileada,Serie).
+serieQueVeOPlaneaVer(PersonaSpoileada,Serie):-quiereVer(PersonaSpoileada,Serie).
+
+/* PUNTO 5*/
+televidenteResponsable(Persona)
