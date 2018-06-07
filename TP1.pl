@@ -43,4 +43,8 @@ leDijo(aye, maiu, got, relacion(amistad, tyrion, john)).
 leDijo(aye, gaston, got, relacion(amistad, tyrion, dragon)).
 
 /*PUNTO 3*/
-leSpoileo(Persona1,Persona2,Serie):- 
+esSpoiler(Serie,Spoiler):- paso(Serie,_,_,Spoiler).
+/*se puede hacer preguntas existenciales e individuales */
+
+/*PUNTO 4*/
+leSpoileo
