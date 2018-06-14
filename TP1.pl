@@ -53,8 +53,15 @@ serieQueVeOPlaneaVer(PersonaSpoileada,Serie):-queMira(PersonaSpoileada,Serie).
 serieQueVeOPlaneaVer(PersonaSpoileada,Serie):-quiereVer(PersonaSpoileada,Serie).
 
 /* PUNTO 5 */
-televidenteResponsable(Persona):-
-                                not(leSpoileo(Persona,_,_)).
+/*televidenteResponsable(Persona):- serieQueVeOPlaneaVer(Persona,_),
+                                  not(leSpoileo(Persona,_,_)).
+                                  */
+televidenteResponsable(Persona):- televidentes(Persona),
+                                  not(leSpoileo(Persona,_,_)).
+                                  
+  %forall(serieQueVeOPlaneaVer(Persona,_),not(leSpoileo(Persona,_,_))).
+  televidentes(Persona):-queMira(Persona,_).
+  televidentes(Persona):-quiereVer(Persona,_).
 /*
 serieQueVeOPlaneaVer(Persona,Serie),
 not(leSpoileo(Persona,_,Serie)).
@@ -67,7 +74,7 @@ vieneZafando(Persona,Serie):- serieQueVeOPlaneaVer(Persona,Serie),
                               paso(Serie,_,_,_),
                               not(leSpoileo(Persona,_,Serie)).
 
-/*no probe este punto!*/
+/*no probe este punto*/
 
 /*********************************************** TEST ****************************************************** */
 :- begin_tests(punto1).
