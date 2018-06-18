@@ -47,11 +47,20 @@ esSpoiler(Serie,Spoiler):- paso(Serie,_,_,Spoiler).
 /*se puede hacer preguntas existenciales e individuales */
 
 /*PUNTO 4*/
-leSpoileo(Persona,PersonaSpoileada,Serie):- leDijo(Persona,PersonaSpoileada,Serie,Spoiler),
-                                            esSpoiler(Serie,Spoiler),
+leSpoileo(Persona,PersonaSpoileada,Serie):- leDijoYesSpoiler(Persona,PersonaSpoileada,Serie),
+                                          %  leDijo(Persona,PersonaSpoileada,Serie,Spoiler),
+                                          %  esSpoiler(Serie,Spoiler),
                                             serieQueVeOPlaneaVer(PersonaSpoileada,Serie).
 serieQueVeOPlaneaVer(PersonaSpoileada,Serie):-queMira(PersonaSpoileada,Serie).
 serieQueVeOPlaneaVer(PersonaSpoileada,Serie):-quiereVer(PersonaSpoileada,Serie).
+/*
+delegue funciones, en este caso -leDijoYesSpoiler-, donde le paso 3 parametors, la persona, el spoileado y la serie
+cuando defino aca abajo, es lo que le dijieron y si es spoiler, pero le tengo que unificar el Spoiler a ambas,no por separado
+ por que  sino me tira un warning PROLOG de que no hay algo unificado, en leSpoileo
+*/
+leDijoYesSpoiler(Persona,PersonaSpoileada,Serie):-
+                                                  leDijo(Persona,PersonaSpoileada,Serie,Spoiler),
+                                                  esSpoiler(Serie,Spoiler).
 
 /* PUNTO 5 */
 /*televidenteResponsable(Persona):- serieQueVeOPlaneaVer(Persona,_),
