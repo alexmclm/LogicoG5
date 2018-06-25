@@ -23,8 +23,8 @@ capitulosPorTemporada(got,2,10).
 capitulosPorTemporada(himym,1,23).
 capitulosPorTemporada(drHouse,8,16).
 
-/*no se implemento los episodios de mad men por que en este paradigma tomamos las cosas ciertas que pertenece a nuestro universo
-idem para alf */
+/*no se implemento los episodios de mad men por que en este paradigma tomamos las cosas ciertas que pertenece a nuestro universo,
+no asi, para las cosas faltas que no se las considera, lo mismo es para Alf */
 
 /* PUNTO 2*/
 /*COSAS IMPORTANTES QUE PASO EN LAS SERIES*/
