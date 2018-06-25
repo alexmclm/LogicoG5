@@ -1,3 +1,4 @@
+% TRABAJADO CON DELEGACION EN EL PUNTO 4 % 
 queMira(juan,got).
 queMira(juan,himym).
 queMira(juan,futurama).
@@ -16,7 +17,7 @@ quiereVer(juan,hoc).
 quiereVer(aye,got).
 quiereVer(gaston,himym).
 
-% serie,Temporada,Capitulos
+% serie, temporada, capitulos
 capitulosPorTemporada(got,3,12).
 capitulosPorTemporada(got,2,10).
 capitulosPorTemporada(himym,1,23).
@@ -27,7 +28,7 @@ idem para alf */
 
 /* PUNTO 2*/
 /*COSAS IMPORTANTES QUE PASO EN LAS SERIES*/
-%    serie, Temporada, Capitulo, lo que paso
+% serie, temporada,Capitulo,LoQuePaso
 paso(futurama,2,3,muerte(seymourDiera)).
 paso(starWars,10,9,muerte(emperor)).
 paso(starWars,1,2,relacion(parentesco, anakin, rey)).
@@ -49,43 +50,35 @@ esSpoiler(Serie,Spoiler):- paso(Serie,_,_,Spoiler).
 /*se puede hacer preguntas existenciales e individuales */
 
 /*PUNTO 4*/
-leSpoileo(Persona,PersonaSpoileada,Serie):- leDijoYesSpoiler(Persona,PersonaSpoileada,Serie),
-                                          %  leDijo(Persona,PersonaSpoileada,Serie,Spoiler),
-                                          %  esSpoiler(Serie,Spoiler),
+leSpoileo(Persona,PersonaSpoileada,Serie):- leDijo(Persona,PersonaSpoileada,Serie,Spoiler),
+                                            esSpoiler(Serie,Spoiler),
                                             serieQueVeOPlaneaVer(PersonaSpoileada,Serie).
 serieQueVeOPlaneaVer(PersonaSpoileada,Serie):-queMira(PersonaSpoileada,Serie).
 serieQueVeOPlaneaVer(PersonaSpoileada,Serie):-quiereVer(PersonaSpoileada,Serie).
-/*
-delegue funciones, en este caso -leDijoYesSpoiler-, donde le paso 3 parametors, la persona, el spoileado y la serie
-cuando defino aca abajo, es lo que le dijieron y si es spoiler, pero le tengo que unificar el Spoiler a ambas,no por separado
- por que  sino me tira un warning PROLOG de que no hay algo unificado, en leSpoileo
-*/
-leDijoYesSpoiler(Persona,PersonaSpoileada,Serie):-
-                                                  leDijo(Persona,PersonaSpoileada,Serie,Spoiler),
-                                                  esSpoiler(Serie,Spoiler).
 
 /* PUNTO 5 */
-
-televidenteResponsable(Persona):- serieQueVeOPlaneaVer(Persona,_),
-                                  not(leSpoileo(Persona,_,_)).
+televidenteResponsable(Persona):-serieQueVeOPlaneaVer(Persona,_),
+                                 not(leSpoileo(Persona,_,_)).
+  %forall(serieQueVeOPlaneaVer(Persona,_),not(leSpoileo(Persona,_,_))).
+/*
+serieQueVeOPlaneaVer(Persona,Serie),
+not(leSpoileo(Persona,_,Serie)).
+*/
 
 /* PUNTO 6 */
-vieneZafando(Persona,Serie):- serieQueVeOPlaneaVer(Persona,Serie),
+vieneZafando(PersonaASpoilear,Serie):- serieQueVeOPlaneaVer(PersonaASpoilear,Serie),
                               esPopularOPasaCosasFuertes(Serie),
-                              not(leSpoileo(Persona,_,Serie)).
+                              not(leSpoileo(_,PersonaASpoilear,Serie)).
 esPopularOPasaCosasFuertes(Serie):- populares(Serie).
 esPopularOPasaCosasFuertes(Serie):- pasoCosasFuertesEnSusTemporadas(Serie).
 
 pasoCosasFuertesEnSusTemporadas(Serie):-
-    capitulosPorTemporada(Serie,Temporada,_),
-    sucesoFuerteTemporada(Serie,Temporada).
+    forall(capitulosPorTemporada(Serie,Temporada,_), sucesoFuerteTemporada(Serie,Temporada)).
+
 
 sucesoFuerteTemporada(Serie,Temporada):- paso(Serie,Temporada,_,muerte(_)).
 sucesoFuerteTemporada(Serie,Temporada):- paso(Serie,Temporada,_,relacion(parentesco,_,_)).
 sucesoFuerteTemporada(Serie,Temporada):- paso(Serie,Temporada,_,relacion(amorosa,_,_)).
-
-
-/*no probe este punto*/
 
 /*********************************************** TEST ****************************************************** */
 :- begin_tests(punto1).
@@ -170,7 +163,7 @@ test(nico_le_dijo_a_maiu_spoiler_StarWars,nondet) :-
 :- begin_tests(punto5).
 test(juan_es_televidente_responsable,nondet):-
   televidenteResponsable(juan).
-test(aye_es_televidente_responsable,nondet):- /* problema con el test en aye!*/
+test(aye_no_es_televidente_responsable,nondet):- /* problema con el test en aye!*/
   televidenteResponsable(aye).
 test(maiu_es_televidente_responsable,nondet):-
   televidenteResponsable(maiu).
@@ -181,11 +174,16 @@ test(gaston_no_es_televidente_responsable,fail):-
 :- end_tests(punto5).
 
 /* **** PUNTO 6 *****/
+
 :- begin_tests(punto6).
 test(maiu_no_viene_zafando,fail):-
   vieneZafando(maiu,_).
-%test(juan_viene_zafando_himym_got_hoc,nondet):-
-%  vieneZafando(juan,himym).
+test(juan_viene_zafando_himym,nondet):-
+ vieneZafando(juan,himym).
+test(juan_viene_zafando_got,nondet):-
+   vieneZafando(juan,got).
+test(juan_viene_zafando_hoc,nondet):-
+  vieneZafando(juan,hoc).
 test(nico_zafa_con_StarWars,nondet):-
   vieneZafando(nico,starWars).
 :- end_tests(punto6).
