@@ -1,4 +1,4 @@
-% TRABAJADO CON DELEGACION EN EL PUNTO 4 % 
+% TRABAJADO CON DELEGACION EN EL PUNTO 4 %
 queMira(juan,got).
 queMira(juan,himym).
 queMira(juan,futurama).
@@ -73,8 +73,9 @@ esPopularOPasaCosasFuertes(Serie):- populares(Serie).
 esPopularOPasaCosasFuertes(Serie):- pasoCosasFuertesEnSusTemporadas(Serie).
 
 pasoCosasFuertesEnSusTemporadas(Serie):-
+    capitulosPorTemporada(Serie,Temporada,_),
     forall(capitulosPorTemporada(Serie,Temporada,_), sucesoFuerteTemporada(Serie,Temporada)).
-
+%me habia olvidado la inversibilidad!
 
 sucesoFuerteTemporada(Serie,Temporada):- paso(Serie,Temporada,_,muerte(_)).
 sucesoFuerteTemporada(Serie,Temporada):- paso(Serie,Temporada,_,relacion(parentesco,_,_)).
@@ -185,5 +186,6 @@ test(juan_viene_zafando_got,nondet):-
 test(juan_viene_zafando_hoc,nondet):-
   vieneZafando(juan,hoc).
 test(nico_zafa_con_StarWars,nondet):-
-  vieneZafando(nico,starWars).
+  vieneZafando(Persona,starWars),
+  Persona == nico.
 :- end_tests(punto6).
