@@ -56,6 +56,7 @@ plotTwist(superCampeones, 9, 9, palabrasClave(suenio, coma, sinPiernas)).
 plotTwist(drHouse, 8, 7, palabrasClave(coma, pastillas)).
 
 /*Relacion de amistad*/
+% esAmigo,PeroEsteNoEsSuAmigo
 amigo(nico, maiu).
 amigo(maiu, gaston).
 amigo(maiu, juan).
@@ -139,7 +140,19 @@ cantidadQueHablanDeLaSerie(Serie,CantidadPosiblesSpoileros):-
   findall(Persona,leDijo(Persona,_,Serie,_),Personas),
   length(Personas,CantidadPosiblesSpoileros).
 
+esPopular(hoc).
+%ya que lo aclara, independientemente del calculo, es popu!
+/* PUNTO 4 */
+fullSpoil(PersonaSpoilera,PersonaSpoileada):-
+  leSpoileo(PersonaSpoilera,PersonaSpoileada,_),
+  noSonLosMismos(PersonaSpoilera,PersonaSpoileada).
 
+fullSpoil(PersonaSpoilera,PersonaSpoileada):-
+  %leSpoileo(AmigoDelSegundo,PersonaSpoileada),
+  amigo(ElAmigoDelSegundo,PersonaSpoilera),
+  fullSpoil(ElAmigoDelSegundo,PersonaSpoilera).
+
+noSonLosMismos(PersonaSpoilera,PersonaSpoileada):- PersonaSpoilera \= PersonaSpoileada.
 /*********************************************** TEST ****************************************************** */
 :- begin_tests(punto1).
 test(juanMira_himymFuturamaGot, nondet) :-
@@ -256,8 +269,8 @@ test(gaston_es_malaGente,nondet):-
   malaGente(gaston).
 test(nico_es_MalaGente,nondet):-
   malaGente(nico).
-test(pedro_noesMalaGente,fail):-
-  malaGente(pedro).
+test(pedro_noEsMalaGente,fail):-
+  not(malaGente(pedro)).
 :- end_tests(parte2_punto1).
 
 /* PUNTO 2
@@ -283,3 +296,23 @@ test(got_esPopular,nondet):-
 test(hoc_esPopular,nondet):-
   esPopular(hoc).
 :- end_tests(parte2_punto3).
+
+/* PUNTO 4*/
+:- begin_tests(parte2_punto4).
+test(nico_hizo_fullSpoil_a_Aye,nondet):-
+  fullSpoil(nico,aye).
+test(nico_hizo_fullSpoil_a_Juan,nondet):-
+  fullSpoil(nico,juan).
+test(nico_hizo_fullSpoil_a_Maiu,nondet):-
+  fullSpoil(nico,maiu).
+test(nico_hizo_fullSpoil_a_Gaston,nondet):-
+  fullSpoil(nico,gaston).
+test(gaston_hizo_fullspoil_a_maiu,nondet):-
+  fullSpoil(gaston,maiu).
+test(gaston_hizo_fullspoil_a_juan,nondet):-
+  fullSpoil(gaston,juan).
+test(gaston_hizo_fullspoil_a_Aye,nondet):-
+  fullSpoil(gaston,aye).
+test(maiu_no_hizo_fullspoil_a_Nadie,fail):-
+  fullSpoil(miau,_).
+:- end_tests(parte2_punto4).
