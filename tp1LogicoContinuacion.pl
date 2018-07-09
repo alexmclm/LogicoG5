@@ -47,6 +47,7 @@ leDijo(aye, maiu, got, relacion(amistad, tyrion, john)).
 leDijo(aye, gaston, got, relacion(amistad, tyrion, dragon)).
 leDijo(nico, juan, futurama, muerte(seymourDiera)).
 leDijo(pedro, aye, got, relacion(amistad, tyrion, dragon)).
+leDijo(pedro,nico,got,relacion(parentesco,tyrion,dragon)).
 /*no agregue lo ultimo porque dice que no es cierto*/
 
 /*serie, temporada, capitulo, palabrasClave*/
@@ -102,15 +103,16 @@ sucesoFuerteTemporada(Serie,Temporada):- paso(Serie,Temporada,_,relacion(amorosa
 /* PUNTO 1*/
 malaGente(Persona):-
   persona(Persona),
-  forall(leDijo(Persona,_,_,_),leSpoileo(Persona,_,_)).
+  forall(leDijo(Persona,PersonaSpoileada,_,_),leSpoileo(Persona,PersonaSpoileada,_)).
 
 persona(Persona):- serieQueVeOPlaneaVer(Persona,_).
-/*
+
 malaGente(Persona):-
-  %persona(Persona),
-  leSpoileo(Persona,_,Serie),
+  queMira(PersonaMala,Serie),
+  %malaGente(PersonaMala),
+  leSpoileo(PersonaMala,Persona,Serie),
   not(queMira(Persona,Serie)).
-*/
+
 /* PUNTO 2
 fuerte(PlotTwist):- paso(_,_,_,muerte()).
 fuerte(PlotTwist):- paso(_,_,_,relacion(amorosa,_,_)).
@@ -142,6 +144,7 @@ cantidadQueHablanDeLaSerie(Serie,CantidadPosiblesSpoileros):-
 
 esPopular(hoc).
 %ya que lo aclara, independientemente del calculo, es popu!
+
 /* PUNTO 4 */
 fullSpoil(PersonaSpoilera,PersonaSpoileada):-
   leSpoileo(PersonaSpoilera,PersonaSpoileada,_),
@@ -149,8 +152,8 @@ fullSpoil(PersonaSpoilera,PersonaSpoileada):-
 
 fullSpoil(PersonaSpoilera,PersonaSpoileada):-
   %leSpoileo(AmigoDelSegundo,PersonaSpoileada),
-  amigo(ElAmigoDelSegundo,PersonaSpoilera),
-  fullSpoil(ElAmigoDelSegundo,PersonaSpoilera).
+  amigo(ElAmigoDelSegundo,PersonaSpoileada),
+  fullSpoil(PersonaSpoilera,ElAmigoDelSegundo).
 
 noSonLosMismos(PersonaSpoilera,PersonaSpoileada):- PersonaSpoilera \= PersonaSpoileada.
 /*********************************************** TEST ****************************************************** */
@@ -270,7 +273,7 @@ test(gaston_es_malaGente,nondet):-
 test(nico_es_MalaGente,nondet):-
   malaGente(nico).
 test(pedro_noEsMalaGente,fail):-
-  not(malaGente(pedro)).
+  malaGente(pedro).
 :- end_tests(parte2_punto1).
 
 /* PUNTO 2
